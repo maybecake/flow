@@ -1,2 +1,2 @@
 # flow
-Playing around with Flutter Riverpod.
+Playing and testing features of Flutter Riverpod.
