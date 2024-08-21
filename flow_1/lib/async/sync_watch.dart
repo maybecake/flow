@@ -29,6 +29,13 @@ extension SyncWatch on Ref {
 // IMO, this is too clunky to use as the watcher needs to know the provider's
 // keepAlive status
 extension AutoDisposeSyncWatch on AutoDisposeRef {
+  FutureOr<T> autoDisposeFutureSyncWatch<T>(
+      AutoDisposeFutureProvider<T> provider) {
+    final hasResult = read(provider.select((v) => v.hasValue || v.hasError));
+    if (!hasResult) return watch(provider.future);
+    return watch(provider).requireValue;
+  }
+
   FutureOr<T> autoDisposeStreamSyncWatch<T>(
       AutoDisposeStreamProvider<T> provider) {
     final hasResult = read(provider.select((v) => v.hasValue || v.hasError));
