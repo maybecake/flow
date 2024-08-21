@@ -6,7 +6,7 @@ part of 'future_or.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$futureOrDoublerHash() => r'eb6fc9d78cc688aba9b1c5b82827ede114b816bd';
+String _$futureOrDoublerHash() => r'825807e53b6a5f25c2cf7c64f6bf3232a0c65bd2';
 
 /// A [FutureOr] provider that explicitly determines the synchronous nature of
 /// the dependency.

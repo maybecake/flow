@@ -26,9 +26,9 @@ Stream<int> simpleNumbers(SimpleNumbersRef ref) async* {
   printColor('  < ($simpleNumbersBuilds) yield 3', color);
   yield 3;
 
-  await Future.delayed(const Duration(seconds: 1), () {});
-  printColor('  < ($simpleNumbersBuilds) invalidate', color);
-  ref.invalidateSelf();
+  // await Future.delayed(const Duration(seconds: 1), () {});
+  // printColor('  < ($simpleNumbersBuilds) invalidate', color);
+  // ref.invalidateSelf();
 }
 
 /// Number of times [streamDoublerProvider] is built.
@@ -45,6 +45,40 @@ Stream<int> streamDoubler(StreamDoublerRef ref) async* {
   final number = await ref.watch(simpleNumbersProvider.future);
   printColor('  > streamDoubler($streamDoublerBuilds) > $number', color);
   yield number * 2;
+}
+
+@riverpod
+Stream<int> streamLoopDoubler(StreamLoopDoublerRef ref) async* {
+  const color = ConsoleColors.red;
+  addDebug('streamLoopDoubler', ++streamDoublerBuilds, color, ref.onDispose);
+
+  // Doesn't work. think it infinite loops.
+  while (true) {
+    final number = await ref.watch(simpleNumbersProvider.future);
+    printColor('  > streamLoopDoubler(x) > $number', color);
+    yield number * 2;
+  }
+}
+
+/// Demonstrates broken looping behavior due to [simpleNumbersProviders] being
+/// unexpectedly disposed.
+class StreamLoopDoublerDemo extends ConsumerWidget {
+  const StreamLoopDoublerDemo({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(streamLoopDoublerProvider).when(
+        // Prevents flickering due to the [streamDoublerProvider] being rebuilt.
+        // skipLoadingOnReload: true,
+        data: (data) => data.toString(),
+        error: (e, st) => '$e, $st',
+        loading: () {
+          printColor('StreamDoublerDemo loading...', ConsoleColors.white);
+          return 'loading...';
+        });
+
+    return Text('Stream loop doubler demo: $value');
+  }
 }
 
 /// Demonstrates broken looping behavior due to [simpleNumbersProviders] being

@@ -21,9 +21,12 @@ FutureOr<int> futureOrDoubler(FutureOrDoublerRef ref) {
   // Use `read` here since
   final hasResult =
       ref.read(simpleNumbersProvider.select((v) => v.hasValue || v.hasError));
-  return hasResult
-      ? ref.watch(simpleNumbersProvider).requireValue * 2
-      : ref.watch(simpleNumbersProvider.future).then((number) => number * 2);
+
+  if (hasResult) {
+    return ref.watch(simpleNumbersProvider).requireValue * 2;
+  } else {
+    return ref.watch(simpleNumbersProvider.future).then((number) => number * 2);
+  }
 }
 
 class FutureOrDoublerDemo extends ConsumerWidget {

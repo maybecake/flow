@@ -6,7 +6,7 @@ part of 'streams.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$simpleNumbersHash() => r'c7920cf7f07b99ea3ba09cd5f371b29d783d8533';
+String _$simpleNumbersHash() => r'95545b209158d3c76fff7832e395f520b18a3c22';
 
 /// Simple numbers tries to yield 1, 2, 3 in a [ProviderStream].
 ///
@@ -42,6 +42,21 @@ final streamDoublerProvider = AutoDisposeStreamProvider<int>.internal(
 );
 
 typedef StreamDoublerRef = AutoDisposeStreamProviderRef<int>;
+String _$streamLoopDoublerHash() => r'f4eacbe094ab0362c5928547d61f96e6752e05f5';
+
+/// See also [streamLoopDoubler].
+@ProviderFor(streamLoopDoubler)
+final streamLoopDoublerProvider = AutoDisposeStreamProvider<int>.internal(
+  streamLoopDoubler,
+  name: r'streamLoopDoublerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$streamLoopDoublerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef StreamLoopDoublerRef = AutoDisposeStreamProviderRef<int>;
 String _$futureDoublerHash() => r'adf7fcb4f235aada2fff7ca9737236a69294779f';
 
 /// This works and does not cause the [simpleNumbersProvider] from disposing.

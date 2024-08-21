@@ -1,4 +1,6 @@
+import 'package:flow_1/async/future.dart' as future;
 import 'package:flow_1/async/future_or.dart';
+import 'package:flow_1/async/streams.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,9 +23,11 @@ class MainApp extends StatelessWidget {
             // StreamDemos(),
             // SizedBox(height: 20.0),
             // StreamDoublerDemo(),
-            // FutureOrDoublerDemo(),
+            // FutureDoublerDemo(),
             // BrokenStreamDoublerDemo(),
-            FutureOrDoublerDemo(),
+            // FutureOrDoublerDemo(),
+            // StreamLoopDoublerDemo(),
+            future.FutureNumberDemo(),
           ],
         )),
       ),
