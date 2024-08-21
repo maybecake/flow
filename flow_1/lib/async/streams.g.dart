@@ -6,7 +6,7 @@ part of 'streams.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$simpleNumbersHash() => r'86cd86625a73aa7cc2ba3d98aeb6a3b0f58d292c';
+String _$simpleNumbersHash() => r'5d6d451931b9396465c4cfd0ccd3de1f4964b0c1';
 
 /// Simple numbers tries to yield 1, 2, 3 in a [ProviderStream].
 ///

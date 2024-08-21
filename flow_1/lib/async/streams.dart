@@ -27,6 +27,7 @@ Stream<int> simpleNumbers(SimpleNumbersRef ref) async* {
   yield 3;
 
   await Future.delayed(const Duration(seconds: 2), () {});
+  printColor('  < ($simpleNumbersBuilds) invalidate', color);
   ref.invalidateSelf();
 }
 
