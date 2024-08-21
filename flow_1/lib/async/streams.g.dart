@@ -6,7 +6,7 @@ part of 'streams.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$simpleNumbersHash() => r'6556f44f6d8358122cacd497b08a2d95a09c6a87';
+String _$simpleNumbersHash() => r'86cd86625a73aa7cc2ba3d98aeb6a3b0f58d292c';
 
 /// Simple numbers tries to yield 1, 2, 3 in a [ProviderStream].
 ///
@@ -23,7 +23,7 @@ final simpleNumbersProvider = AutoDisposeStreamProvider<int>.internal(
 );
 
 typedef SimpleNumbersRef = AutoDisposeStreamProviderRef<int>;
-String _$streamDoublerHash() => r'ccddf055147696f1bfabec380d49b17781e3155f';
+String _$streamDoublerHash() => r'aba81a6ec192ca52a8fb4de657cd160896e64143';
 
 /// This stream doubler demo does not work if used by itself. I think it stop watching
 /// after yielding and causes the simpleNumberProvider to be disposed and
@@ -42,7 +42,7 @@ final streamDoublerProvider = AutoDisposeStreamProvider<int>.internal(
 );
 
 typedef StreamDoublerRef = AutoDisposeStreamProviderRef<int>;
-String _$futureDoublerHash() => r'2d1413e77d2fa9c1f6d0aea1cff8b486f9d09848';
+String _$futureDoublerHash() => r'adf7fcb4f235aada2fff7ca9737236a69294779f';
 
 /// This works and does not cause the [simpleNumbersProvider] from disposing.
 /// Having this at the same time as the [streamDoublerProvider] will cause that

@@ -1,3 +1,4 @@
+import 'package:flow_1/helpers/debug.dart';
 import 'package:flow_1/helpers/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,19 +13,21 @@ int simpleNumbersBuilds = 0;
 @riverpod
 Stream<int> simpleNumbers(SimpleNumbersRef ref) async* {
   const color = ConsoleColors.green;
-  printColor('  ^ simpleNumbers ${++simpleNumbersBuilds}', color);
-  ref.onDispose(() {
-    printColor('  🫠 simpleNumbers $simpleNumbersBuilds', color);
-  });
+  addDebug('simpleNumbers', ++simpleNumbersBuilds, color, ref.onDispose);
 
+  printColor('  < ($simpleNumbersBuilds) waiting for 1st', color);
+  await Future.delayed(const Duration(seconds: 2), () {});
   printColor('  < ($simpleNumbersBuilds) yield 1', color);
   yield 1;
-  await Future.delayed(const Duration(seconds: 1), () {});
+  await Future.delayed(const Duration(seconds: 2), () {});
   printColor('  < ($simpleNumbersBuilds) yield 2', color);
   yield 2;
-  await Future.delayed(const Duration(seconds: 1), () {});
+  await Future.delayed(const Duration(seconds: 2), () {});
   printColor('  < ($simpleNumbersBuilds) yield 3', color);
   yield 3;
+
+  await Future.delayed(const Duration(seconds: 2), () {});
+  ref.invalidateSelf();
 }
 
 /// Number of times [streamDoublerProvider] is built.
@@ -36,14 +39,33 @@ int streamDoublerBuilds = 0;
 @riverpod
 Stream<int> streamDoubler(StreamDoublerRef ref) async* {
   const color = ConsoleColors.red;
-  printColor(' ^ streamDoubler(${++streamDoublerBuilds})', color);
-  ref.onDispose(() {
-    printColor(' 🫠 streamDoubler($streamDoublerBuilds)', color);
-  });
+  addDebug('streamDoubler', ++streamDoublerBuilds, color, ref.onDispose);
 
   final number = await ref.watch(simpleNumbersProvider.future);
   printColor('  > streamDoubler($streamDoublerBuilds) > $number', color);
   yield number * 2;
+}
+
+/// Demonstrates broken looping behavior due to [simpleNumbersProviders] being
+/// unexpectedly disposed.
+class BrokenStreamDoublerDemo extends ConsumerWidget {
+  const BrokenStreamDoublerDemo({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(streamDoublerProvider).when(
+        // Prevents flickering due to the [streamDoublerProvider] being rebuilt.
+        // skipLoadingOnReload: true,
+        data: (data) => data.toString(),
+        error: (e, st) => '$e, $st',
+        loading: () {
+          printColor(
+              'Broken StreamDoublerDemo loading...', ConsoleColors.white);
+          return 'loading...';
+        });
+
+    return Text('Broken Stream doubler demo: $value');
+  }
 }
 
 class StreamDoublerDemo extends ConsumerWidget {
@@ -51,11 +73,27 @@ class StreamDoublerDemo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // !!! IMPORTANT !!!
+    //
+    // Without this watch, the [streamDoublerProvider] will
+    // dispose of itself and the [simpleNumbersProvider] that it has been
+    // watching, this causes a loop of the first value yielded by
+    // [simpleNumbersProvider].
+    //
+    // This is not a good pattern (breaks encapsulation) since the goal is to
+    // not have to know that [streamDoublerProvider] depends on
+    // [simpleNumbersProvider].
+    ref.watch(simpleNumbersProvider);
+
     final value = ref.watch(streamDoublerProvider).when(
-          data: (data) => data.toString(),
-          error: (e, st) => '$e, $st',
-          loading: () => 'loading...',
-        );
+        // Prevents flickering due to the [streamDoublerProvider] being rebuilt.
+        skipLoadingOnReload: true,
+        data: (data) => data.toString(),
+        error: (e, st) => '$e, $st',
+        loading: () {
+          printColor(' StreamDoublerDemo loading...', ConsoleColors.white);
+          return 'loading...';
+        });
 
     return Text('Stream doubler demo: $value');
   }
@@ -70,10 +108,7 @@ int futureDoublerBuilds = 0;
 @riverpod
 Future<int> futureDoubler(FutureDoublerRef ref) async {
   const color = ConsoleColors.yellow;
-  printColor(' ^ futureDoubler(${++futureDoublerBuilds})', color);
-  ref.onDispose(() {
-    printColor(' 🫠 futureDoubler($futureDoublerBuilds)', color);
-  });
+  addDebug('futureDoubler', ++futureDoublerBuilds, color, ref.onDispose);
 
   final number = await ref.watch(simpleNumbersProvider.future);
   printColor('  > futureDoubler($futureDoublerBuilds) > $number', color);
@@ -85,11 +120,66 @@ class FutureDoublerDemo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(futureDoublerProvider).when(
-          data: (data) => data.toString(),
-          error: (e, st) => '$e, $st',
-          loading: () => 'loading...',
-        );
+        // Prevents flickering due to the provider being rebuilt.
+        skipLoadingOnReload: true,
+        data: (data) => data.toString(),
+        error: (e, st) => '$e, $st',
+        loading: () {
+          printColor(' FutureDoublerDemo loading...', ConsoleColors.white);
+          return 'loading...';
+        });
 
     return Text('Future doubler demo: $value');
+  }
+}
+
+class StreamDemos extends StatefulWidget {
+  StreamDemos({super.key});
+
+  final demos = [
+    const FutureDoublerDemo(),
+    const BrokenStreamDoublerDemo(),
+    const StreamDoublerDemo()
+  ];
+
+  @override
+  State<StreamDemos> createState() => _StreamDemosState();
+}
+
+class _StreamDemosState extends State<StreamDemos> {
+  late ConsumerWidget? selected;
+
+  @override
+  void initState() {
+    super.initState();
+    selected = widget.demos.firstOrNull;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    printColor('Resetting', ConsoleColors.white);
+    return Column(children: [
+      DropdownButton(
+          value: selected,
+          items: widget.demos
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e.toString(),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (e) {
+            setState(() {
+              selected = e;
+            });
+          }),
+      const SizedBox(height: 20.0),
+      Builder(
+        builder: (_) => selected ?? const Text('Select a demo! 👆'),
+      ),
+    ]);
   }
 }
