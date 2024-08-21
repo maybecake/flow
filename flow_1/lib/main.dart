@@ -1,4 +1,4 @@
-import 'package:flow_1/async/streams.dart';
+import 'package:flow_1/async/future_or.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,16 +11,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: Center(
             child: Column(
           children: [
-            const Text('Demos', style: TextStyle(fontSize: 18.0)),
-            const SizedBox(height: 20.0),
-            StreamDemos(),
-            const SizedBox(height: 20.0),
+            Text('Demos', style: TextStyle(fontSize: 18.0)),
+            SizedBox(height: 20.0),
+            // StreamDemos(),
+            // SizedBox(height: 20.0),
             // StreamDoublerDemo(),
+            // FutureOrDoublerDemo(),
+            // BrokenStreamDoublerDemo(),
+            FutureOrDoublerDemo(),
           ],
         )),
       ),

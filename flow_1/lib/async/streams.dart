@@ -10,23 +10,23 @@ part 'streams.g.dart';
 int simpleNumbersBuilds = 0;
 
 /// Simple numbers tries to yield 1, 2, 3 in a [ProviderStream].
-@riverpod
+@Riverpod(keepAlive: false)
 Stream<int> simpleNumbers(SimpleNumbersRef ref) async* {
   const color = ConsoleColors.green;
   addDebug('simpleNumbers', ++simpleNumbersBuilds, color, ref.onDispose);
 
   printColor('  < ($simpleNumbersBuilds) waiting for 1st', color);
-  await Future.delayed(const Duration(seconds: 2), () {});
+  await Future.delayed(const Duration(seconds: 1), () {});
   printColor('  < ($simpleNumbersBuilds) yield 1', color);
   yield 1;
-  await Future.delayed(const Duration(seconds: 2), () {});
+  await Future.delayed(const Duration(seconds: 1), () {});
   printColor('  < ($simpleNumbersBuilds) yield 2', color);
   yield 2;
-  await Future.delayed(const Duration(seconds: 2), () {});
+  await Future.delayed(const Duration(seconds: 1), () {});
   printColor('  < ($simpleNumbersBuilds) yield 3', color);
   yield 3;
 
-  await Future.delayed(const Duration(seconds: 2), () {});
+  await Future.delayed(const Duration(seconds: 1), () {});
   printColor('  < ($simpleNumbersBuilds) invalidate', color);
   ref.invalidateSelf();
 }
