@@ -171,9 +171,9 @@ class FutureDoublerDemo extends ConsumerWidget {
 }
 
 final demos = [
-  FutureDoublerDemo(),
-  BrokenStreamDoublerDemo(),
-  StreamDoublerDemo(),
+  const FutureDoublerDemo(),
+  const BrokenStreamDoublerDemo(),
+  const StreamDoublerDemo(),
 ];
 
 class StreamDemos extends StatefulWidget {
