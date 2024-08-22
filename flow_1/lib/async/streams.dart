@@ -1,8 +1,9 @@
-import 'package:flow_1/helpers/debug.dart';
-import 'package:flow_1/helpers/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../helpers/debug.dart';
+import '../helpers/strings.dart';
 
 part 'streams.g.dart';
 

@@ -1,31 +1,17 @@
 import 'dart:async';
 
-import 'package:flow_1/helpers/debug.dart';
-import 'package:flow_1/helpers/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../helpers/debug.dart';
+import '../helpers/strings.dart';
+import 'basic_providers.dart';
 
 part 'fancy_futureor_deps.g.dart';
 
 /// This file demonstrates the depending on a [FutureProvider] inside another
 /// [Future] and [FutureOr] provider.
-
-/// A notifier that returns a future that can be completed by calling [finish].
-@riverpod
-class FutureNumberNotifier extends _$FutureNumberNotifier {
-  late Completer<int> _completer;
-
-  @override
-  Future<int> build() {
-    _completer = Completer();
-    return _completer.future;
-  }
-
-  void finish(int num) {
-    _completer.complete(num);
-  }
-}
 
 /// Number of times the [futureOrDoublerProvider] is built.
 int futureOrNumberDoublerBuilds = 0;

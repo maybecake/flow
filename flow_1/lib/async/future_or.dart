@@ -1,10 +1,11 @@
-import 'package:flow_1/async/streams.dart';
-import 'package:flow_1/async/sync_watch.dart';
-import 'package:flow_1/helpers/debug.dart';
-import 'package:flow_1/helpers/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../helpers/debug.dart';
+import '../helpers/strings.dart';
+import 'streams.dart';
+import 'sync_watch.dart';
 
 part 'future_or.g.dart';
 

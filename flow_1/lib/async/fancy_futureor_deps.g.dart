@@ -43,26 +43,5 @@ final futureNumberTriplerProvider = AutoDisposeFutureProvider<int>.internal(
 );
 
 typedef FutureNumberTriplerRef = AutoDisposeFutureProviderRef<int>;
-String _$futureNumberNotifierHash() =>
-    r'78792c6dbf9d07e001da3afd72f0e704abc653b8';
-
-/// This file demonstrates the depending on a [FutureProvider] inside another
-/// [Future] and [FutureOr] provider.
-/// A notifier that returns a future that can be completed by calling [finish].
-///
-/// Copied from [FutureNumberNotifier].
-@ProviderFor(FutureNumberNotifier)
-final futureNumberNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<FutureNumberNotifier, int>.internal(
-  FutureNumberNotifier.new,
-  name: r'futureNumberNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$futureNumberNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$FutureNumberNotifier = AutoDisposeAsyncNotifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

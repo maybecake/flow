@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+/// Some helper and convenience functions.
+
 /// From: https://github.com/rrousselGit/riverpod/issues/3359
 ///
 /// A set of helper extensions to help streamline producing and using
