@@ -1,4 +1,4 @@
-import 'package:flow_1/async/future.dart' as future;
+import 'package:flow_1/async/fancy_futureor_deps.dart' as future;
 import 'package:flow_1/async/future_or.dart';
 import 'package:flow_1/async/streams.dart';
 import 'package:flutter/material.dart';
