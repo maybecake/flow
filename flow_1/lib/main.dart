@@ -16,17 +16,17 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
-            child: Column(
+            child: Wrap(
+          spacing: 30.0,
           children: [
-            Text('Demos', style: TextStyle(fontSize: 18.0)),
-            SizedBox(height: 20.0),
-            // StreamDemos(),
+            // Text('Demos', style: TextStyle(fontSize: 18.0)),
+            StreamDemos(),
             // SizedBox(height: 20.0),
             // StreamDoublerDemo(),
             // FutureDoublerDemo(),
             // BrokenStreamDoublerDemo(),
             // FutureOrDoublerDemo(),
-            // StreamLoopDoublerDemo(),
+
             future.FutureNumberDemo(),
           ],
         )),

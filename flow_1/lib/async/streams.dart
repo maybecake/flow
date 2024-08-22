@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -54,11 +55,11 @@ Stream<int> streamLoopDoubler(StreamLoopDoublerRef ref) async* {
   addDebug('streamLoopDoubler', ++streamDoublerBuilds, color, ref.onDispose);
 
   // Doesn't work. think it infinite loops.
-  while (true) {
-    final number = await ref.watch(simpleNumbersProvider.future);
-    printColor('  > streamLoopDoubler(x) > $number', color);
-    yield number * 2;
-  }
+  // while (true) {
+  //   final number = await ref.watch(simpleNumbersProvider.future);
+  //   printColor('  > streamLoopDoubler(x) > $number', color);
+  //   yield number * 2;
+  // }
 }
 
 /// Demonstrates broken looping behavior due to [simpleNumbersProviders] being
@@ -169,26 +170,27 @@ class FutureDoublerDemo extends ConsumerWidget {
   }
 }
 
-class StreamDemos extends StatefulWidget {
-  StreamDemos({super.key});
+final demos = [
+  FutureDoublerDemo(),
+  BrokenStreamDoublerDemo(),
+  StreamDoublerDemo(),
+];
 
-  final demos = [
-    const FutureDoublerDemo(),
-    const BrokenStreamDoublerDemo(),
-    const StreamDoublerDemo()
-  ];
+class StreamDemos extends StatefulWidget {
+  const StreamDemos({super.key});
 
   @override
   State<StreamDemos> createState() => _StreamDemosState();
 }
 
 class _StreamDemosState extends State<StreamDemos> {
-  late ConsumerWidget? selected;
+  late Widget? selected;
+  bool reset = false;
 
   @override
   void initState() {
     super.initState();
-    selected = widget.demos.firstOrNull;
+    selected = demos.firstOrNull;
   }
 
   @override
@@ -197,7 +199,7 @@ class _StreamDemosState extends State<StreamDemos> {
     return Column(children: [
       DropdownButton(
           value: selected,
-          items: widget.demos
+          items: demos
               .map(
                 (e) => DropdownMenuItem(
                   value: e,
@@ -209,7 +211,12 @@ class _StreamDemosState extends State<StreamDemos> {
               .toList(),
           onChanged: (e) {
             setState(() {
-              selected = e;
+              selected = null;
+            });
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() => selected = e);
+              }
             });
           }),
       const SizedBox(height: 20.0),

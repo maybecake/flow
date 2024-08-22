@@ -42,7 +42,7 @@ final streamDoublerProvider = AutoDisposeStreamProvider<int>.internal(
 );
 
 typedef StreamDoublerRef = AutoDisposeStreamProviderRef<int>;
-String _$streamLoopDoublerHash() => r'f4eacbe094ab0362c5928547d61f96e6752e05f5';
+String _$streamLoopDoublerHash() => r'7d9b3256fe43465e80fa43a101b0f91ad0f72da0';
 
 /// See also [streamLoopDoubler].
 @ProviderFor(streamLoopDoubler)
