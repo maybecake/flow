@@ -19,9 +19,9 @@ Future<String> string(StringRef ref) {
 }
 
 /// A very simple way to combine two async providers. However, this will always
-/// emit an initial loading state.
+/// emit an initial loading state - even if using a [FutureOr], due to the async.
 @riverpod
-Future<(int, String)> simpleCombined(SimpleCombinedRef ref) async {
+FutureOr<(int, String)> simpleCombined(SimpleCombinedRef ref) async {
   final number = await ref.watch(numberProvider.future);
   final string = await ref.watch(stringProvider.future);
 

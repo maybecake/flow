@@ -34,10 +34,10 @@ final stringProvider = AutoDisposeFutureProvider<String>.internal(
 );
 
 typedef StringRef = AutoDisposeFutureProviderRef<String>;
-String _$simpleCombinedHash() => r'eeae264727fb9b11486a45da42387bcd672f0dbc';
+String _$simpleCombinedHash() => r'4be548004edcf04647975b04347efc0229cfb875';
 
 /// A very simple way to combine two async providers. However, this will always
-/// emit an initial loading state.
+/// emit an initial loading state - even if using a [FutureOr], due to the async.
 ///
 /// Copied from [simpleCombined].
 @ProviderFor(simpleCombined)
