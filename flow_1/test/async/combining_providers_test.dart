@@ -20,7 +20,6 @@ Future<String> string(StringRef ref) {
 
 /// A very simple way to combine two async providers. However, this will always
 /// emit an initial loading state.
-// TODO: test out what error states look like.
 @riverpod
 Future<(int, String)> simpleCombined(SimpleCombinedRef ref) async {
   final number = await ref.watch(numberProvider.future);
@@ -70,12 +69,13 @@ void main() {
     container.listen(stringProvider, (_, __) {});
   });
 
-  test('Future providers initialize in loading state.', () async {
+  test('Combined providers.', () async {
     intCompleter.complete(1);
 
     expect(container.read(numberProvider).isLoading, isTrue);
     expect(container.read(stringProvider).isLoading, isTrue);
     expect(container.read(advancedCombinedProvider).isLoading, isTrue);
+    expect(container.read(simpleCombinedProvider).isLoading, isTrue);
 
     await Future(() {});
 
@@ -86,12 +86,22 @@ void main() {
     expect(container.read(numberProvider).value, 1);
     expect(container.read(stringProvider).isLoading, isTrue);
     expect(container.read(advancedCombinedProvider).isLoading, isTrue);
+    // Simple combined provider is always loading because it's rebuilt.
+    expect(container.read(simpleCombinedProvider).isLoading, isTrue);
 
     await Future(() {});
 
     // Everything is loaded and ready.
     expect(container.read(stringProvider).value, 'myString');
     expect(container.read(advancedCombinedProvider).isLoading, isFalse);
+    expect(container.read(advancedCombinedProvider).value, (1, 'myString'));
+    // Simple combined provider is always loading because it's rebuilt.
+    expect(container.read(simpleCombinedProvider).isLoading, isTrue);
+
+    // Keep the simple combined provider alive to get a value.
+    container.listen(simpleCombinedProvider, (_, __) {});
+    expect(container.read(simpleCombinedProvider).isLoading, isTrue);
+    await Future(() {});
     expect(container.read(advancedCombinedProvider).value, (1, 'myString'));
   });
 
