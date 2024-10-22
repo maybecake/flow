@@ -1,2 +1,3 @@
 # flow
-Playing and testing features of Flutter Riverpod.
+
+Playing and testing various features of Flutter.
